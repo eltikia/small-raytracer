@@ -1,0 +1,12 @@
+#vim files
+*.swp
+
+#executable
+raytracer
+
+#objects
+*.o
+
+#outputs
+*.bmp
+*.jpg

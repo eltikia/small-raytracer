@@ -69,6 +69,11 @@ inline double vectorLength(Vector v) {
 	return sqrt(v.x*v.x + v.y*v.y + v.z*v.z);
 }
 
+inline Vector pointDifference(Point p1, Point p2) {
+	Vector v = {p1.x - p2.x, p1.y - p2.y, p1.z - p2.z};
+	return v; 
+}
+
 extern int write_bmp(const char* filename, int width, int height, char* rgb);
 
 int main(int argc, char* argv[]) {

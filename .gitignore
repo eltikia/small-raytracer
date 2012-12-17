@@ -1,5 +1,6 @@
 #vim files
 *.swp
+.DS_Store
 
 #executable
 raytracer

@@ -97,7 +97,7 @@ Intersection getFirstIntersection(Ray* ray, Plane* box) {
 
 Color traceRay(Ray* ray, Plane* box) {
 	Color color = {0, 0, 0};
-	Point light = {-3, -2, -3};
+	Point light = {0.5, 2, -3.5};
 	Intersection intersect = getFirstIntersection(ray, box);
 	if(intersect.lambda > epsilon) {
 		Vector directionToLight = pointDifference(light, intersect.point); 
@@ -105,7 +105,7 @@ Color traceRay(Ray* ray, Plane* box) {
 		Intersection tempIntersect = getFirstIntersection(&rayToLight, box);
 		if(tempIntersect.lambda >= 1 || tempIntersect.lambda == 0) {
 			double length = vectorLength(directionToLight);
-			double scale = 11 / (length * length);
+			double scale = 5 / (length * length);
 			color = intersect.plane->color;
 			color.x *= scale;
 			color.y *= scale;
@@ -113,6 +113,15 @@ Color traceRay(Ray* ray, Plane* box) {
 		}
 	}
 	return color;
+}
+
+void  normalizeColor(Color* color) {
+	double factor = 255/fmax(color->x, fmax(color->y, color->z));
+	if(factor < 1) {
+		color->x = color->x*factor;
+		color->y *= factor;
+		color->z *= factor;
+	}
 }
 
 extern int write_bmp(const char* filename, int width, int height, char* rgb);
@@ -125,14 +134,14 @@ int main(int argc, char* argv[]) {
 		for(y=0; y<480; y++) {
 			Ray r = getRay(x, y);
 			Color c = traceRay(&r, box);
-			
+			normalizeColor(&c);	
 			int ipos = 3*(640*y+x);
 			double red = c.z;
 			double green  = c.y;
 			double blue = c.x;
-			rgb[ipos + 2] = (unsigned char)(red > 255 ? 255 : red); 
-			rgb[ipos + 1] = (unsigned char)(green > 255 ? 255 : green);
-			rgb[ipos] = (unsigned char)(blue > 255 ? 255 : blue);
+			rgb[ipos + 2] = (unsigned char)red; 
+			rgb[ipos + 1] = (unsigned char)green;
+			rgb[ipos] = (unsigned char)blue;
 		}
 	}
 	write_bmp("test.bmp", 640, 480, rgb);

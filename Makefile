@@ -1,6 +1,7 @@
-all: main.cc
-	clang -O2 main.cc -o raytracer
+all: main.c bmp.o
+	gcc -O2 bmp.o main.c -o raytracer
 
-#bmp.o: bmp.c
-#	clang -c -O2 bmp.c -o bmp.o
+#Darf aus irgendeinem Grund nicht mit O2 kompiliert werden...
+bmp.o: bmp.c
+	gcc -c bmp.c -o bmp.o
 

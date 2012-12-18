@@ -57,9 +57,22 @@ Plane* createBox() {
 	return box;
 }	
 
+double vectorLength(Vector v) {
+	return sqrt(v.x*v.x + v.y*v.y + v.z*v.z);
+}
+
+Vector pointDifference(Point p1, Point p2) {
+	Vector v = {p1.x - p2.x, p1.y - p2.y, p1.z - p2.z};
+	return v; 
+}
+
+double scalarProduct(Vector* v1, Vector* v2) {
+	return v1->x*v2->x + v1->y*v2->y + v1->z*v2->z;
+}
+
 Intersection rayHitsPlane(Ray* r, Plane* p)  {
-	double gamma = r->direction.x * p->normal.x + r->direction.y * p->normal.y + r->direction.z * p->normal.z;
-	double side = p->distance - (p->normal.x * r->origin.x + p->normal.y * r->origin.y + p->normal.z * r->origin.z);
+	double gamma = scalarProduct(&(r->direction), &(p->normal));
+	double side = p->distance - scalarProduct(&(p->normal), &(r->origin));
 	Intersection intersect  = {0, 0, 0, 0, p};
 	if( gamma * side > epsilon) {
 		double lambda = side / gamma;
@@ -71,15 +84,6 @@ Intersection rayHitsPlane(Ray* r, Plane* p)  {
 	}
 
 	return intersect;
-}
-
-double vectorLength(Vector v) {
-	return sqrt(v.x*v.x + v.y*v.y + v.z*v.z);
-}
-
-Vector pointDifference(Point p1, Point p2) {
-	Vector v = {p1.x - p2.x, p1.y - p2.y, p1.z - p2.z};
-	return v; 
 }
 
 Intersection getFirstIntersection(Ray* ray, Plane* box) {
@@ -119,8 +123,8 @@ void  normalizeColor(Color* color) {
 	double factor = 255/fmax(color->x, fmax(color->y, color->z));
 	if(factor < 1) {
 		color->x = color->x*factor;
-		color->y *= factor;
-		color->z *= factor;
+		color->y = color->y*factor;
+		color->z = color->z*factor;
 	}
 }
 

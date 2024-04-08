@@ -44,15 +44,15 @@ Ray getRay(int x, int y) {
 Plane* createBox() {
 	Plane* box = (Plane*)malloc(5*sizeof(Plane));
 	int size = 5;
-	Plane p0 = {-1, 0, 0, size, 255, 0, 100};//links
+	Plane p0 = { { -1, 0, 0 }, size, { 255, 0, 100 } };//links
 	box[0] = p0;
-	Plane p1 = {1, 0, 0, size, 0, 255, 0};//rechts
+	Plane p1 = { { 1, 0, 0 }, size, { 0, 255, 0 } };//rechts
 	box[1] = p1;
-	Plane p2 = {0, 0, -1, size, 255,255,255};//hinten
+	Plane p2 = { { 0, 0, -1 }, size, { 255,255,255 } };//hinten
 	box[2] = p2;
-	Plane p3 = {0, 1, 0, size, 255, 255, 255};//oben
+	Plane p3 = { { 0, 1, 0 }, size, { 255, 255, 255 } };//oben
 	box[3] = p3;
-	Plane p4 = {0, -1, 0, size, 255, 255, 255};//unten
+	Plane p4 = { { 0, -1, 0 }, size, { 255, 255, 255 } };//unten
 	box[4] = p4;
 	return box;
 }	
@@ -73,7 +73,7 @@ double scalarProduct(Vector* v1, Vector* v2) {
 Intersection rayHitsPlane(Ray* r, Plane* p)  {
 	double gamma = scalarProduct(&(r->direction), &(p->normal));
 	double side = p->distance - scalarProduct(&(p->normal), &(r->origin));
-	Intersection intersect  = {0, 0, 0, 0, p};
+	Intersection intersect  = { { 0, 0, 0 }, 0, p};
 	if( gamma * side > epsilon) {
 		double lambda = side / gamma;
 		intersect.point.x = r->origin.x + r->direction.x * lambda;

@@ -11,7 +11,12 @@ typedef struct {
 	double 	z;
 } Vector;
 typedef Vector Point;
-typedef Vector Color;
+
+typedef struct {
+	double blue;
+	double green;
+	double red;
+} Color;
 
 typedef struct {
 	Point origin;
@@ -111,20 +116,20 @@ Color traceRay(Ray* ray, Plane* box) {
 			double length = vectorLength(directionToLight);
 			double scale = 5 / (length * length);
 			color = intersect.plane->color;
-			color.x *= scale;
-			color.y *= scale;
-			color.z *= scale;
+			color.blue *= scale;
+			color.green *= scale;
+			color.red *= scale;
 		}
 	}
 	return color;
 }
 
 void  normalizeColor(Color* color) {
-	double factor = 255/fmax(color->x, fmax(color->y, color->z));
+	double factor = 255/fmax(color->blue, fmax(color->green, color->red));
 	if(factor < 1) {
-		color->x = color->x*factor;
-		color->y = color->y*factor;
-		color->z = color->z*factor;
+		color->blue *= factor;
+		color->green *= factor;
+		color->red *= factor;
 	}
 }
 
@@ -140,12 +145,9 @@ int main(int argc, char* argv[]) {
 			Color c = traceRay(&r, box);
 			normalizeColor(&c);	
 			int ipos = 3*(640*y+x);
-			double red = c.z;
-			double green  = c.y;
-			double blue = c.x;
-			rgb[ipos + 2] = (unsigned char)red; 
-			rgb[ipos + 1] = (unsigned char)green;
-			rgb[ipos] = (unsigned char)blue;
+			rgb[ipos + 2] = (unsigned char)c.red; 
+			rgb[ipos + 1] = (unsigned char)c.green;
+			rgb[ipos] = (unsigned char)c.blue;
 		}
 	}
 	write_bmp("test.bmp", 640, 480, rgb);
